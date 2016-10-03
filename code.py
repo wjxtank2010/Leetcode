@@ -3,7 +3,7 @@ class ListNode(object):     #Problem 2
     def __init__(self, x):
         self.val = x
         self.next = None
-def addTwoNumbers(self, l1, l2):
+def addTwoNumbers(self, l1, l2): #2
         """
         :type l1: ListNode
         :type l2: ListNode
@@ -2184,3 +2184,92 @@ def maxPoints(self, points):
             return max(map(len,slope_dic.values()))
         else:
             return 0
+
+def maxSubArray(self, nums): #53
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if len(nums) == 0:
+            return 0
+        else:
+            result = nums[0]
+            range_sum = nums[0]
+            for num in nums[1:]:
+                if num>0:
+                    if result>0:
+                        range_sum += num
+                        result = max(range_sum,result)
+                    else:
+                        result = num
+                        range_sum = num
+                else:
+                    if result<0:
+                        result = max(result,num)
+                    else:
+                        if range_sum+num>0:
+                            range_sum += num
+                        else:
+                            range_sum = 0
+            return result
+
+        #Accumulative sum == subtration between two accmulative sum starting from 0
+        # if len(nums) == 0:
+        #     return 0
+        # min = nums[0]
+        # sum = nums[0]
+        # result = nums[0]
+        # for item in nums[1:]:
+        #     sum += item
+        #     if sum<min:
+        #         min = sum
+        #     else:
+        #         result = max(result,sum-min)
+        # return max(result,max(nums))
+
+        #Divide and Conquer runtime O(nlog(n))
+        #if len(nums) == 0:
+        #     return 0
+        # def subArray(nums):
+        #     if len(nums) == 0:
+        #         return -sys.maxint-1
+        #     mid = len(nums)/2
+        #     leftmax,rightmax = -sys.maxint - 1,-sys.maxint - 1
+        #     sum = 0
+        #     for i in range(mid,-1,-1):
+        #         sum += nums[i]
+        #         leftmax = max(leftmax,sum)
+        #     sum = 0
+        #     for j in range(mid,len(nums)):
+        #         sum += nums[j]
+        #         rightmax = max(rightmax,sum)
+        #     return max(leftmax+rightmax-nums[mid],subArray(nums[0:mid]),subArray(nums[mid+1:]))
+        # return subArray(nums)
+
+def addTwoNumbers(self, l1, l2): #2
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        dummy = ListNode(0)
+        cur = dummy
+        carry = 0
+        while l1 and l2:
+            node = ListNode(0)
+            carry,node.val = divmod(l1.val+l2.val+carry,10)
+            cur.next = node
+            cur = node
+            l1,l2 = l1.next,l2.next
+        tmp = None
+        if l1:
+            tmp = l1
+        elif l2:
+            tmp = l2
+        cur.next = tmp
+        while tmp:
+            carry,tmp.val = divmod(tmp.val+carry,10)
+            cur,tmp = tmp,tmp.next
+        if carry:
+            cur.next = ListNode(1)
+        return dummy.next

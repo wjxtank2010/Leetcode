@@ -1,5 +1,5 @@
 __author__ = 'Moon'
-
+import sys
 def combinationSum4(nums, target):
         """
         :type nums: List[int]
@@ -47,28 +47,28 @@ def countComponents(n, edges):
             i = i+1
         return i
 
-def generateParenthesis(n):
+def maxSubArray(nums):
         """
-        :type n: int
-        :rtype: List[str]
+        :type nums: List[int]
+        :rtype: int
         """
-        result = [["",0]]
-        for j in range(2*n):
-            for i in range(len(result)):
-                string = result[i][0]
-                difference = result[i][1]
-                if difference>0:
-                    if (len(string)+difference)/2 < n:
-                        result[i][0] += "("
-                        result[i][1] += 1
-                        result.append([string+")",difference-1])
-                    else:
-                        result[i][0] += ")"
-                        result[i][1] -= 1
-                else:
-                    result[i][0] += "("
-                    result[i][1] += 1
-        return [item[0] for item in result]
-answer = ["(((())))","((()()))","((())())","((()))()","(()(()))","(()()())","(()())()","(())(())","(())()()","()((()))","()(()())","()(())()","()()(())","()()()()"]
-print(set(generateParenthesis(4))-set(answer))
+        if len(nums) == 0:
+            return 0
+        def subArray(nums):
+            if len(nums) == 0:
+                return -sys.maxint-1
+            mid = len(nums)/2
+            leftmax,rightmax = -sys.maxint - 1,-sys.maxint - 1
+            sum = 0
+            for i in range(mid,-1,-1):
+                sum += nums[i]
+                leftmax = max(leftmax,sum)
+            sum = 0
+            for j in range(mid,len(nums)):
+                sum += nums[j]
+                rightmax = max(rightmax,sum)
+            return max(leftmax+rightmax-nums[mid],subArray(nums[0:mid]),subArray(nums[mid+1:]))
+        return subArray(nums)
 
+nums = [-2,-1,-3,4,-1,2,1,-5,-4]
+print(maxSubArray(nums))
