@@ -2273,3 +2273,46 @@ def addTwoNumbers(self, l1, l2): #2
         if carry:
             cur.next = ListNode(1)
         return dummy.next
+
+def myPow(self, x, n): #50
+        """
+        :type x: float
+        :type n: int
+        :rtype: float
+        """
+        if n == 0:
+            return 1
+        abs_n = abs(n)
+        power_list = [x]
+        binary_list = [n%2]
+        power_value = x
+        abs_n /= 2
+        while abs_n>0:
+            power_value *= power_value
+            if power_value>=sys.maxint:
+                if n>0:
+                    return sys.maxint
+                else:
+                    return 0
+            power_list.append(power_value)
+            binary_list.append(abs_n%2)
+            abs_n /= 2
+        result = reduce(lambda x,y:x*y,filter(lambda k:k != 0,map(lambda x,y:x*y,power_list,binary_list)))
+        if n<0:
+            return 1/result
+        else:
+            return result
+
+        #make use of the reverse property and record each power is not necessary.
+        # if n == 0:
+        #     return 1
+        # if n<0:
+        #     n = -n
+        #     x = 1/x
+        # result = 1
+        # while n>0:
+        #     if n%2 == 1:
+        #         result *= x
+        #     x *= x
+        #     n /= 2
+        # return result
