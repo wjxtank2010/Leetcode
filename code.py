@@ -2316,3 +2316,52 @@ def myPow(self, x, n): #50
         #     x *= x
         #     n /= 2
         # return result
+
+def wordBreak(self, s, wordDict): #139
+        """
+        :type s: str
+        :type wordDict: Set[str]
+        :rtype: bool
+        """
+        char_list = [0]*len(s)
+        for i in range(len(s)):
+            for word in wordDict:
+                if s[i-len(word)+1:i+1] == word and ((i-len(word) == -1) or char_list[i-len(word)]):
+                    char_list[i] = 1
+        print(char_list)
+        return char_list[-1]>0
+
+def findMin(self, nums): #153
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        start = 0
+        end = len(nums)-1
+        while start<end:
+            if nums[start]<=nums[end]:
+                return nums[start]
+            mid = (start+end)/2
+            if nums[mid]>=nums[start]:
+                start = mid+1
+            else:
+                end = mid
+        return nums[start]
+
+def maxArea(self, height): #11
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        start = 0
+        end = len(height)-1
+        result = 0
+        while start<end:
+            start_value,end_value = height[start],height[end]
+            if start_value<=end_value:
+                result = max(start_value*(end-start),result)
+                start += 1
+            else:
+                result = max(end_value*(end-start),result)
+                end -= 1
+        return result
