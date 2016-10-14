@@ -1,4 +1,4 @@
-import itertools
+import itertools,collections
 class ListNode(object):     #Problem 2
     def __init__(self, x):
         self.val = x
@@ -1472,12 +1472,7 @@ def combinationSum2(self, candidates, target): #40
         :type target: int
         :rtype: List[List[int]]
         """
-        dic = {}
-        for item in candidates:
-            if item in dic:
-                dic[item] += 1
-            else:
-                dic[item] = 1
+        dic = collections.Counter(candidates)
         candidates.sort()
         dp = [[[]]] + [[] for x in xrange(target)]
         for i in xrange(1,target+1):
