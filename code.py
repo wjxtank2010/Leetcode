@@ -2398,3 +2398,63 @@ class Solution(object):  #148
             cur = cur.next
         cur.next = head1 or head2
         return dummy.next
+
+
+class ListNode(): #146
+    def __init__(self,key,value):
+        self.key = key
+        self.val = value
+        self.pre = None
+        self.next = None
+
+class LRUCache(object):
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        self.capacity = capacity
+        self.dic = {}
+        self.dummy = ListNode("head",0)
+        self.tail = ListNode("tail",0)
+        self.dummy.next,self.tail.pre = self.tail,self.dummy
+
+    def get(self, key):
+        """
+        :rtype: int
+        """
+        if key in self.dic:
+            node = self.dic[key]
+            node.pre.next,node.next.pre = node.next,node.pre
+            self.dummy.next.pre,node.next = node,self.dummy.next
+            self.dummy.next,node.pre = node, self.dummy
+            return node.val
+        else:
+            return -1
+
+
+    def set(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: nothing
+        """
+        if key in self.dic:
+            node = self.dic[key]
+            node.val = value
+            node.pre.next,node.next.pre = node.next,node.pre
+            self.dummy.next.pre,node.next = node,self.dummy.next
+            self.dummy.next,node.pre = node, self.dummy
+        else:
+            node = ListNode(key,value)
+            if len(self.dic)<self.capacity:
+                self.dummy.next.pre,node.next = node,self.dummy.next
+                self.dummy.next,node.pre = node,self.dummy
+            else:
+                node_to_del = self.tail.pre
+                del self.dic[node_to_del.key]
+                if node_to_del != self.dummy:
+                    node_to_del.pre.next,self.tail.pre = self.tail,node_to_del.pre
+                    node_to_del = None
+                    self.dummy.next.pre,node.next = node,self.dummy.next
+                    self.dummy.next,node.pre = node,self.dummy
+            self.dic[key] = node
