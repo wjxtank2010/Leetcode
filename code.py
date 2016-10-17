@@ -2360,3 +2360,41 @@ def maxArea(self, height): #11
                 result = max(end_value*(end-start),result)
                 end -= 1
         return result
+
+class Solution(object):  #148
+    def sortList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head == None or head.next == None:
+            return head
+        dummy = ListNode(0)
+        dummy.next = head
+        slow = dummy
+        fast = dummy
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        head2 = self.sortList(slow.next)
+        slow.next = None
+        head1 = self.sortList(head)
+        return self.mergeList(head1,head2)
+
+
+
+    def mergeList(self,head1,head2):
+        if head1 == None or head2 == None:
+            return head1 or head2
+        dummy = ListNode(0)
+        cur = dummy
+        while head1 and head2:
+            if head1.val<=head2.val:
+                cur.next = head1
+                head1 = head1.next
+            else:
+                cur.next = head2
+                head2 = head2.next
+            cur = cur.next
+        cur.next = head1 or head2
+        return dummy.next
