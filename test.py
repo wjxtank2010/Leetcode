@@ -63,11 +63,26 @@ def mergeList(head1,head2):
             cur = cur.next
         cur.next = head1 or head2
         return dummy.next
-a = [1,2,3,4,5,6,6,7]
-b = []
-head_a = generateLinkList(a)
-head_b = generateLinkList(b)
-#print(testLinkList(head_a),testLinkList(head_b))
-result = mergeList(head_a,head_b)
-print(testLinkList(result))
+
+def trap(height):
+    stack = []
+    water = 0
+    for index,value in enumerate(height):
+        max_inter_height = 0
+        print(stack)
+        while stack:
+            last = stack[-1]
+            if last[1]<=value:
+                water += (index-last[0]-1)*(last[1]-max_inter_height)
+                ele = stack.pop()
+                max_inter_height = ele[1]
+            else:
+                water += (index-last[0]-1)*(value-max_inter_height)
+                #stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2]-value)
+                break
+        stack.append((index,value,value))
+    return water
+
+height = [2,1,0,2]
+print(trap(height))
 

@@ -2458,3 +2458,43 @@ class LRUCache(object):
                     self.dummy.next.pre,node.next = node,self.dummy.next
                     self.dummy.next,node.pre = node,self.dummy
             self.dic[key] = node
+
+
+def trap(self, height): #42 Stack
+    """
+    :type height: List[int]
+    :rtype: int
+    """
+    stack = []
+    water = 0
+    for index,value in enumerate(height):
+        max_inter_height = 0
+        while stack:
+            last = stack[-1]
+            if last[1]<=value:
+                water += (index-last[0]-1)*(last[1]-max_inter_height)
+                ele = stack.pop()
+                max_inter_height = ele[1]
+            else:
+                water += (index-last[0]-1)*(value-max_inter_height)
+                break
+        stack.append((index,value))
+    return water
+    #O(1) space
+    # left,right = 0,len(height)-1
+    # water = 0
+    # maxleft,maxright = 0,0
+    # while left<=right:
+    #     if height[left]<=height[right]:
+    #         if height[left] >= maxleft:
+    #             maxleft = height[left]
+    #         else:
+    #             water += maxleft-height[left]
+    #         left += 1
+    #     else:
+    #         if height[right] >= maxright:
+    #             maxright = height[right]
+    #         else:
+    #              water += maxright-height[right]
+    #         right -= 1
+    # return water
