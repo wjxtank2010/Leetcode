@@ -2499,45 +2499,54 @@ def trap(self, height): #42 Stack
     #         right -= 1
     # return water
 
-class Solution(object): #149
-    def maxPoints(self, points):
+def search(self, nums, target): #33
         """
-        :type points: List[Point]
+        :type nums: List[int]
+        :type target: int
         :rtype: int
         """
-        if len(points) <= 2:
-            return len(points)
-        slope_dic = {}
-        for i in xrange(len(points)):
-            for j in xrange(i+1,len(points)):
-                if points[i].x == points[j].x:
-                    if points[i].y != points[j].y:
-                        if ("infi",points[i].x) not in slope_dic:
-                            slope_dic[("infi",points[i].x)] = [i,j]
-                        else:
-                            if j not in slope_dic[("infi",points[i].x)]:
-                                slope_dic[("infi",points[i].x)].append(j)
-                    else:
-                        if ("infi",points[i].x,points[i].y) not in slope_dic:
-                            slope_dic[("infi",points[i].x,points[i].y)] = [i,j]
-                        else:
-                           if j not in slope_dic[("infi",points[i].x,points[i].y)]:
-                                slope_dic[("infi",points[i].x,points[i].y)].append(j)
+        start = 0
+        end = len(nums)-1
+        while start<end:
+            mid = (start+end)/2
+            #It's an incresing array, just use the normal way to find a element
+            if nums[start]<nums[end]:
+                if nums[mid]<target:
+                    start = mid + 1
+                elif nums[mid]>target:
+                    end = mid
                 else:
-                    slope = float((points[j].y-points[i].y))/(points[j].x-points[i].x)
-                    intersection = 0
-                    if slope == 0:
-                        intersection = points[j].y
+                    return mid
+            #It's still a rotated array,keep narrowing down
+            else:
+                #The max num is closer to end
+                if nums[mid]>=nums[start]:
+                    if target>nums[mid]:
+                        start = mid+1
+                    elif target<nums[mid]:
+                        if target>nums[end]:
+                            end = mid
+                        elif target<nums[end]:
+                            start = mid+1
+                        else:
+                            return end
                     else:
-                        intersection = points[i].x-points[i].y/slope
-                    if (slope,intersection) in slope_dic:
-                        if i not in slope_dic[(slope,intersection)]:
-                            slope_dic[(slope,intersection)].append(i)
-                        if j not in slope_dic[(slope,intersection)]:
-                            slope_dic[(slope,intersection)].append(j)
+                        return mid
+                #nums[mid]<end, indicating the max num is closer to start
+                else:
+                    if target>nums[mid]:
+                        if target>nums[end]:
+                            end = mid
+                        elif target<nums[end]:
+                            start = mid+1
+                        else:
+                            return end
+                    elif target<nums[mid]:
+                        end = mid
                     else:
-                        slope_dic[(slope,intersection)] = [i,j]
-        if slope_dic:
-            return max(map(len,slope_dic.values()))
+                        return mid
+        if nums[start] == target:
+            return start
         else:
-            return 0
+            return -1
+>>>>>>> 394751d5c11a4a34b0fabd23e27c3e052b3978b8
