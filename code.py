@@ -2498,3 +2498,54 @@ def trap(self, height): #42 Stack
     #              water += maxright-height[right]
     #         right -= 1
     # return water
+
+def search(self, nums, target): #33
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        start = 0
+        end = len(nums)-1
+        while start<end:
+            mid = (start+end)/2
+            #It's an incresing array, just use the normal way to find a element
+            if nums[start]<nums[end]:
+                if nums[mid]<target:
+                    start = mid + 1
+                elif nums[mid]>target:
+                    end = mid
+                else:
+                    return mid
+            #It's still a rotated array,keep narrowing down
+            else:
+                #The max num is closer to end
+                if nums[mid]>=nums[start]:
+                    if target>nums[mid]:
+                        start = mid+1
+                    elif target<nums[mid]:
+                        if target>nums[end]:
+                            end = mid
+                        elif target<nums[end]:
+                            start = mid+1
+                        else:
+                            return end
+                    else:
+                        return mid
+                #nums[mid]<end, indicating the max num is closer to start
+                else:
+                    if target>nums[mid]:
+                        if target>nums[end]:
+                            end = mid
+                        elif target<nums[end]:
+                            start = mid+1
+                        else:
+                            return end
+                    elif target<nums[mid]:
+                        end = mid
+                    else:
+                        return mid
+        if nums[start] == target:
+            return start
+        else:
+            return -1
