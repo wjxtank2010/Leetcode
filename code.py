@@ -2498,3 +2498,46 @@ def trap(self, height): #42 Stack
     #              water += maxright-height[right]
     #         right -= 1
     # return water
+
+class Solution(object): #149
+    def maxPoints(self, points):
+        """
+        :type points: List[Point]
+        :rtype: int
+        """
+        if len(points) <= 2:
+            return len(points)
+        slope_dic = {}
+        for i in xrange(len(points)):
+            for j in xrange(i+1,len(points)):
+                if points[i].x == points[j].x:
+                    if points[i].y != points[j].y:
+                        if ("infi",points[i].x) not in slope_dic:
+                            slope_dic[("infi",points[i].x)] = [i,j]
+                        else:
+                            if j not in slope_dic[("infi",points[i].x)]:
+                                slope_dic[("infi",points[i].x)].append(j)
+                    else:
+                        if ("infi",points[i].x,points[i].y) not in slope_dic:
+                            slope_dic[("infi",points[i].x,points[i].y)] = [i,j]
+                        else:
+                           if j not in slope_dic[("infi",points[i].x,points[i].y)]:
+                                slope_dic[("infi",points[i].x,points[i].y)].append(j)
+                else:
+                    slope = float((points[j].y-points[i].y))/(points[j].x-points[i].x)
+                    intersection = 0
+                    if slope == 0:
+                        intersection = points[j].y
+                    else:
+                        intersection = points[i].x-points[i].y/slope
+                    if (slope,intersection) in slope_dic:
+                        if i not in slope_dic[(slope,intersection)]:
+                            slope_dic[(slope,intersection)].append(i)
+                        if j not in slope_dic[(slope,intersection)]:
+                            slope_dic[(slope,intersection)].append(j)
+                    else:
+                        slope_dic[(slope,intersection)] = [i,j]
+        if slope_dic:
+            return max(map(len,slope_dic.values()))
+        else:
+            return 0
