@@ -2592,4 +2592,32 @@ def search(self, nums, target): #33
             return start
         else:
             return -1
->>>>>>> 394751d5c11a4a34b0fabd23e27c3e052b3978b8
+
+def numIslands(self, grid): #200 DFS
+        """
+        :type grid: List[List[str]]
+        :rtype: int
+        """
+        mark_dic = {}
+        count = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == "1" and (i,j) not in mark_dic:
+                    count += 1
+                    mark_dic[(i,j)] = count
+                    self.markGrid(i,j,grid,mark_dic,count)
+        return count
+
+    def markGrid(self,i,j,grid,mark_dic,count): #mark all "1" neighbors around the target land
+        if i-1>= 0 and grid[i-1][j] == "1" and (i-1,j) not in mark_dic: #top
+            mark_dic[(i-1,j)] = count
+            self.markGrid(i-1,j,grid,mark_dic,count) #down
+        if i+1 <= len(grid)-1 and grid[i+1][j] == "1" and (i+1,j) not in mark_dic:
+            mark_dic[(i+1,j)] = count
+            self.markGrid(i+1,j,grid,mark_dic,count)
+        if j-1>= 0 and grid[i][j-1] == "1" and (i,j-1) not in mark_dic:
+            mark_dic[(i,j-1)] = count
+            self.markGrid(i,j-1,grid,mark_dic,count)
+        if j+1 <= len(grid[0])-1 and grid[i][j+1] == "1" and (i,j+1) not in mark_dic:
+            mark_dic[(i,j+1)] = count
+            self.markGrid(i,j+1,grid,mark_dic,count)

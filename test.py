@@ -1,30 +1,5 @@
 __author__ = 'Moon'
 import sys
-def myPow(x, n): #50
-        """
-        :type x: float
-        :type n: int
-        :rtype: float
-        """
-        if n == 0:
-            return 1
-        abs_n = abs(n)
-        power_list = [x]
-        binary_list = [abs_n%2]
-        power_value = x
-        abs_n /= 2
-        while abs_n>0:
-            power_value *= power_value
-            power_list.append(power_value)
-            binary_list.append(abs_n%2)
-            abs_n /= 2
-        print(binary_list)
-        print(power_list)
-        result = reduce(lambda x,y:x*y,filter(lambda k:k != 0,map(lambda x,y:x*y,power_list,binary_list)))
-        if n<0:
-            return 1/result
-        else:
-            return result
 
 class ListNode(object):
     def __init__(self,x):
@@ -64,25 +39,32 @@ def mergeList(head1,head2):
         cur.next = head1 or head2
         return dummy.next
 
-def trap(height):
-    stack = []
-    water = 0
-    for index,value in enumerate(height):
-        max_inter_height = 0
-        print(stack)
-        while stack:
-            last = stack[-1]
-            if last[1]<=value:
-                water += (index-last[0]-1)*(last[1]-max_inter_height)
-                ele = stack.pop()
-                max_inter_height = ele[1]
-            else:
-                water += (index-last[0]-1)*(value-max_inter_height)
-                #stack[-1] = (stack[-1][0],stack[-1][1],stack[-1][2]-value)
-                break
-        stack.append((index,value,value))
-    return water
+def numIslands(grid):
+        """
+        :type grid: List[List[str]]
+        :rtype: int
+        """
+        count = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == "1":
+                    #look around land to see if there is a neibor that has already been marked
+                    if i-1>=0 and type(grid[i-1][j]) is int: #top
+                        grid[i][j] = grid[i-1][j]
+                    elif i+1<=len(grid)-1 and type(grid[i][j+1]) is int: #down
+                        grid[i][j] = grid[i+1][j]
+                    elif j-1>=0 and type(grid[i][j-1]) is int: #left
+                        grid[i][j] = grid[i][j-1]
+                    elif j+1<=len(grid[0])-1 and type(grid[i][j+1]) is int: #right
+                        grid[i][j] = grid[i][j+1]
+                    else:
+                        count += 1
+                        grid[i][j] = count
+        print(grid)
+        return count
 
-height = [2,1,0,2]
-print(trap(height))
+
+#grid = [["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]
+grid = [["1"],["1"]]
+print(numIslands(grid))
 
