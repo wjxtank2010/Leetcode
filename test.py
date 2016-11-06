@@ -39,32 +39,23 @@ def mergeList(head1,head2):
         cur.next = head1 or head2
         return dummy.next
 
-def numIslands(grid):
+def lengthLongestPath(input):
         """
-        :type grid: List[List[str]]
+        :type input: str
         :rtype: int
         """
-        count = 0
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                if grid[i][j] == "1":
-                    #look around land to see if there is a neibor that has already been marked
-                    if i-1>=0 and type(grid[i-1][j]) is int: #top
-                        grid[i][j] = grid[i-1][j]
-                    elif i+1<=len(grid)-1 and type(grid[i][j+1]) is int: #down
-                        grid[i][j] = grid[i+1][j]
-                    elif j-1>=0 and type(grid[i][j-1]) is int: #left
-                        grid[i][j] = grid[i][j-1]
-                    elif j+1<=len(grid[0])-1 and type(grid[i][j+1]) is int: #right
-                        grid[i][j] = grid[i][j+1]
-                    else:
-                        count += 1
-                        grid[i][j] = count
-        print(grid)
-        return count
-
-
-#grid = [["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]
-grid = [["1"],["1"]]
-print(numIslands(grid))
-
+        dir_parts = input.split("\n") #O(n) split each line as separate parts
+        print(dir_parts)
+        stack = []
+        max_len = 0
+        for part in dir_parts:
+            num_of_tab = part.count("\t")
+            while num_of_tab < len(stack): #If they equal, part is the last part in the file path chain and should be appended to the file path chain
+                stack.pop()
+            stack.append(len(part)-num_of_tab)
+            print(stack)
+            if "." in part:
+                max_len = max(max_len,sum(stack)+len(stack)-1)
+        return max_len
+input = "dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext"
+print(lengthLongestPath(input))

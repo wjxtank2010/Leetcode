@@ -2621,3 +2621,152 @@ def numIslands(self, grid): #200 DFS
         if j+1 <= len(grid[0])-1 and grid[i][j+1] == "1" and (i,j+1) not in mark_dic:
             mark_dic[(i,j+1)] = count
             self.markGrid(i,j+1,grid,mark_dic,count)
+
+def lengthLongestPath(self, input): #385
+        """
+        :type input: str
+        :rtype: int
+        """
+        dir_parts = input.split("\n")
+        stack = []
+        max_len = 0
+        for dir in dir_parts:
+            num_of_tab = dir.count("\t")
+            while num_of_tab < len(stack): #If the number of "\t" is less than the number of element(namely number of dirs) in stack, dir can not be appended to the current file path.
+                stack.pop()
+            stack.append(len(part)-num_of_tab) #Push the length of dir or file onto stack
+            if "." in part:
+                max_len = max(max_len,sum(stack)+len(stack)-1) #The file path equals the sum of length of all subdir plus the concatenation mark "/"
+        return max_len
+
+def searchMatrix(self, matrix, target): #74
+        """
+        :type matrix: List[List[int]]
+        :type target: int
+        :rtype: bool
+        """
+        row_num,col_num = len(matrix),len(matrix[0])
+        row_start = 0
+        row_end = row_num-1
+        while row_start<row_end:
+            mid = (row_start+row_end)/2
+            if matrix[mid][0]>target:
+                row_end = mid
+            elif matrix[mid][0]<target:
+                row_start = mid+1
+            else:
+                return True
+        if matrix[row_start][0]>target:
+            row_start -= 1
+        col_start = 0
+        col_end = col_num-1
+        while col_start<col_end:
+            mid = (col_start+col_end)/2
+            if matrix[row_start][mid]>target:
+                col_end = mid
+            elif matrix[row_start][mid]<target:
+                col_start = mid+1
+            else:
+                return True
+        if matrix[row_start][col_start] == target:
+            return True
+        else:
+            return False
+
+
+class Solution: #179  define new compara operator for sort.
+    # @param {integer[]} nums
+    # @return {string}
+    def largestNumber(self, nums):
+        if not any(nums):
+            return "0"
+        if len(nums)>1:
+            nums.sort(self.compara)
+        return reduce(lambda x,y:str(x)+str(y),nums,"")
+
+    def compara(self,x,y):
+        num_1 = int(str(x)+str(y))
+        num_2 = int(str(y)+str(x))
+        if num_1>=num_2:
+            return -1
+        else:
+            return 1
+
+
+class BSTIterator(object): #173 In-order traversal with stack
+    def __init__(self, root):
+        """
+        :type root: TreeNode
+        """
+        self.stack = []
+        while root:
+            self.stack.append(root)
+            root = root.left
+
+    def hasNext(self):
+        """
+        :rtype: bool
+        """
+        if self.stack:
+            return True
+        else:
+            return False
+
+    def next(self):
+        """
+        :rtype: int
+        """
+        ele = self.stack.pop()
+        right = ele.right
+        while right:
+            self.stack.append(right)
+            right = right.left
+        return ele.val
+
+def summaryRanges(self, nums): #228
+        """
+        :type nums: List[int]
+        :rtype: List[str]
+        """
+        if len(nums) == 0:
+            return []
+        start = (0,nums[0])
+        result = []
+        for i in range(1,len(nums)):
+            if nums[i] > nums[i-1]+1:
+                if i-1-start[0]>0:
+                    result.append(str(start[1])+"->"+str(nums[i-1]))
+                else:
+                    result.append(str(start[1]))
+                start = (i,nums[i])
+        if start[0] == len(nums)-1:
+            result.append(str(start[1]))
+        else:
+            result.append(str(start[1])+"->"+str(nums[-1]))
+        return result
+
+def findDuplicate(self, nums): #287 binary search
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        start = 1
+        end = len(nums)-1
+        while start<end:
+            search = (start+end)/2
+            less,equal,greater = 0,0,0
+            for num in nums:
+                if num<search:
+                    less += 1
+                elif num == search:
+                    equal += 1
+                else:
+                    greater += 1
+            if equal>1:
+                return search
+            elif less>search-1:
+                end = search-1
+            else:
+                start = search+1
+        return start
+
