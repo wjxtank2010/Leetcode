@@ -2770,3 +2770,68 @@ def findDuplicate(self, nums): #287 binary search
                 start = search+1
         return start
 
+def longestConsecutive(self, nums): #128
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        num_dic = {}
+        for num in nums:
+            if num not in num_dic:
+                num_dic[num] = 1
+        res = 0
+        for num in nums:
+            if num-1 not in num_dic:
+                m = num + 1
+                while m in num_dic:
+                    m += 1
+                res = max(res,m-num)
+        return res
+
+def fizzBuzz(self, n): #412
+        """
+        :type n: int
+        :rtype: List[str]
+        """
+        result = []
+        for i in range(1,n+1):
+            if i%15 == 0:
+                result.append("FizzBuzz")
+            elif i%3 == 0:
+                result.append("Fizz")
+            elif i%5 == 0:
+                result.append("Buzz")
+            else:
+                result.append(str(i))
+        return result
+
+
+def rotate(self, matrix): #48 Math
+        """
+        :type matrix: List[List[int]]
+        :rtype: void Do not return anything, modify matrix in-place instead.
+        """
+        center = (len(matrix)-1)
+        for i in range(len(matrix)):
+            for j in range(len(matrix)):
+                if type(matrix[center-j][i]) is tuple:
+                    matrix[i][j] = (matrix[center-j][i][1],matrix[i][j])
+                else:
+                    matrix[i][j] = (matrix[center-j][i],matrix[i][j])
+        for i in range(len(matrix)):
+            for j in range(len(matrix)):
+                matrix[i][j] = matrix[i][j][0]
+
+def subsets(self, nums): #78
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        if len(nums) == 0:
+            return [[]]
+        result = []
+        tmp = self.subsets(nums[:-1])
+        result += tmp
+        for item in tmp:
+            result.append(item+[nums[-1]])
+        return result
