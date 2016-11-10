@@ -39,23 +39,3 @@ def mergeList(head1,head2):
         cur.next = head1 or head2
         return dummy.next
 
-def lengthLongestPath(input):
-        """
-        :type input: str
-        :rtype: int
-        """
-        dir_parts = input.split("\n") #O(n) split each line as separate parts
-        print(dir_parts)
-        stack = []
-        max_len = 0
-        for part in dir_parts:
-            num_of_tab = part.count("\t")
-            while num_of_tab < len(stack): #If they equal, part is the last part in the file path chain and should be appended to the file path chain
-                stack.pop()
-            stack.append(len(part)-num_of_tab)
-            print(stack)
-            if "." in part:
-                max_len = max(max_len,sum(stack)+len(stack)-1)
-        return max_len
-input = "dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext"
-print(lengthLongestPath(input))

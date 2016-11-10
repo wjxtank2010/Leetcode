@@ -2594,19 +2594,19 @@ def search(self, nums, target): #33
             return -1
 
 def numIslands(self, grid): #200 DFS
-        """
-        :type grid: List[List[str]]
-        :rtype: int
-        """
-        mark_dic = {}
-        count = 0
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                if grid[i][j] == "1" and (i,j) not in mark_dic:
-                    count += 1
-                    mark_dic[(i,j)] = count
-                    self.markGrid(i,j,grid,mark_dic,count)
-        return count
+    """
+    :type grid: List[List[str]]
+    :rtype: int
+    """
+    mark_dic = {}
+    count = 0
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j] == "1" and (i,j) not in mark_dic:
+                count += 1
+                mark_dic[(i,j)] = count
+                self.markGrid(i,j,grid,mark_dic,count)
+    return count
 
     def markGrid(self,i,j,grid,mark_dic,count): #mark all "1" neighbors around the target land
         if i-1>= 0 and grid[i-1][j] == "1" and (i-1,j) not in mark_dic: #top
@@ -2835,3 +2835,186 @@ def subsets(self, nums): #78
         for item in tmp:
             result.append(item+[nums[-1]])
         return result
+
+def numTrees(self, n): #96
+        """
+        :type n: int
+        :rtype: int
+        """
+        tab = [1]*(n+1) #Record the number of unique BST from 0 to n
+        for i in range(1,n+1):
+            ways = 0 #Number of unique BST for i
+            for j in range(1,i+1):    #For each of the number from 1 to i, count the number of unique BST
+                ways += tab[j-1]*tab[i-j]
+            tab[i] = ways
+        return tab[-1]
+
+
+class Solution(object): #404
+    def sumOfLeftLeaves(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        return self.sumLeftLeaves(root,False)
+
+    def sumLeftLeaves(self,root,is_left):
+        if not root:
+            return 0
+        if is_left and not root.left and not root.right:
+            return root.val
+        else:
+            return self.sumLeftLeaves(root.left,True)+self.sumLeftLeaves(root.right,False)
+
+def longestPalindrome(self, s): #409
+        """
+        :type s: str
+        :rtype: int
+        """
+        tab = collections.Counter(s).values()
+        even = filter(lambda x:x%2 == 0,tab)
+        odd = filter(lambda x:x%2 == 1,tab)
+        if not odd:
+            return sum(even)
+        else:
+            return sum(even)+sum(odd)-len(odd)+1
+
+
+def addStrings(self, num1, num2): #415
+        """
+        :type num1: str
+        :type num2: str
+        :rtype: str
+        """
+        index1 = len(num1)-1
+        index2 = len(num2)-1
+        result = ""
+        carry = 0
+        while index1>=0 and index2>=0:
+            digit_sum = int(num1[index1])+int(num2[index2])+carry
+            result = str((digit_sum)%10)+result
+            carry = digit_sum/10
+            index1 -= 1
+            index2 -= 1
+        while index1>=0:
+            digit_sum = int(num1[index1])+carry
+            result = str((digit_sum)%10)+result
+            carry = digit_sum/10
+            index1 -= 1
+        while index2>=0:
+            digit_sum = int(num2[index2])+carry
+            result = str((digit_sum)%10)+result
+            carry = digit_sum/10
+            index2 -= 1
+        if carry == 1:
+            result = "1"+result
+        return result
+
+def countBattleships(self, board): #419
+        """
+        :type board: List[List[str]]
+        :rtype: int
+        """
+        result = 0
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == "X":
+                    ver_pre = False
+                    if i == 0 or (i>0 and board[i-1][j] == "."):
+                        ver_pre = True
+                    hor_pre = False
+                    if j == 0 or (j>0 and board[i][j-1] == "."):
+                        hor_pre = True
+                    if hor_pre and ver_pre:
+                        result += 1
+        return result
+
+def insertionSortList(self, head): #147
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head:
+            return head
+        list_node = [head]
+        cur = head.next
+        while cur:
+            for j in range(len(list_node)):
+                if cur.val<=list_node[j].val:
+                    list_node.insert(j,cur)
+                    break
+            if cur.val>list_node[-1].val:
+                list_node.append(cur)
+            cur = cur.next
+        for i in range(len(list_node)-1):
+            list_node[i].next = list_node[i+1]
+        list_node[-1].next = None
+        return list_node[0]
+
+def removeDuplicateLetters(self, s): #316
+        """
+        :type s: str
+        :rtype: str
+        """
+        char_dic = {}
+        for index,char in enumerate(s):
+            if char in char_dic:
+                char_dic[char].append(index)
+            else:
+                char_dic[char] = [index]
+        char_list = char_dic.keys()
+        char_list.sort()
+        print(char_dic,char_list)
+        result = ""
+        start_index = -1
+        while char_list:
+            for i in range(len(char_list)):
+                fir_char_index = -1
+                for index in char_dic[char_list[i]]: #Find the first index that is greater the index of last char
+                    if index>start_index:
+                        fir_char_index = index
+                        break
+                is_valid = True
+                for indexes in char_dic.values():
+                    if fir_char_index>indexes[-1]: #If the index of char precedes all other remainning lastest chars, it could be added to the result
+                        is_valid = False
+                        break
+                if is_valid:
+                    result += char_list[i]
+                    del char_dic[char_list[i]]
+                    char_list.pop(i)
+                    start_index = fir_char_index
+                    break
+        return result
+
+def detectCycle(self, head): #142 math
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        fast = head
+        low = head
+        while fast and fast.next:
+            low = low.next
+            fast = fast.next.next
+            if fast == low:
+                low = head
+                while low != fast:
+                    low = low.next
+                    fast = fast.next
+                return low
+        return None
+
+def findRepeatedDnaSequences(self, s): #187
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        dna = {}
+        result = []
+        for i in range(len(s)-9):
+            if s[i:i+10] in dna:
+                result.append(s[i:i+10])
+            else:
+                dna[s[i:i+10]] = 1
+        return list(set(result))
