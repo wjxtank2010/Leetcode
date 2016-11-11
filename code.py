@@ -3018,3 +3018,105 @@ def findRepeatedDnaSequences(self, s): #187
             else:
                 dna[s[i:i+10]] = 1
         return list(set(result))
+
+def frequencySort(self, s): #451 hash table
+        """
+        :type s: str
+        :rtype: str
+        """
+        char_dic = collections.Counter(s)
+        char_list = char_dic.items()
+        char_list.sort(key=lambda k:k[1],reverse = True)
+        return "".join(map(lambda k:k[0]*k[1],char_list))
+
+def circularArrayLoop(self, nums): #457
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+        for i in range(len(nums)):
+            count = 0
+            pre = i
+            isloop = True
+            if nums[i] == 0:
+                break
+            is_forward = nums[i]>0
+            while count<len(nums):
+                count += 1
+                cur = (pre+nums[pre])%len(nums)
+                if pre == cur or (nums[cur]>0) ^ is_forward:# stop if running into a dead end or different sign element
+                    isloop = False
+                    break
+                else:
+                    pre = cur
+            if isloop:
+                return True
+            else: # mark all the elements on the wrong path as visited
+                pre = i
+                while count >= 0:
+                   cur = (pre+nums[pre])%len(nums)
+                   nums[pre] = 0
+                   pre = cur
+                   count -= 1
+        return False
+
+def minimumTotal(self, triangle): #120
+        """
+        :type triangle: List[List[int]]
+        :rtype: int
+        """
+        if not triangle:
+            return 0
+        record = [0]
+        for i in range(len(triangle)):
+            tmp = []
+            for j in range(len(triangle[i])):
+                if j == 0:
+                    tmp.append(record[0]+triangle[i][j])
+                elif j == len(triangle[i])-1:
+                    tmp.append(record[-1]+triangle[i][j])
+                else:
+                    tmp.append(min(record[j],record[j-1])+triangle[i][j])
+            record = tmp[:]
+        return min(record)
+
+def minPathSum(self, grid): #64
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        if not grid:
+            return 0
+        result = [0]*len(grid[0])
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if i == 0:
+                    if j == 0:
+                        result[j] = grid[i][j]
+                    else:
+                        result[j] = result[j-1]+grid[i][j]
+                else:
+                    if j == 0:
+                        result[j] = result[j]+grid[i][j]
+                    else:
+                        result[j] = min(result[j],result[j-1])+grid[i][j]
+            #print(result)
+        return result[-1]
+
+class Solution(object): #279
+    _nums = [0]
+    def numSquares(self, n):
+        nums = self._nums
+        sq_list = []
+        sqrt = 1
+        while sqrt**2<=n:
+            sq_list.append(sqrt**2)
+            sqrt += 1
+        while len(nums)<=n:
+            append = 4
+            for item in sq_list:
+                if item <= len(nums):
+                    append = min(append,nums[-item]+1)
+            nums.append(append)
+            #print(nums)
+        return nums[n]

@@ -23,19 +23,27 @@ def testLinkList(head):
         head = head.next
     return result
 
-def mergeList(head1,head2):
-        if head1 == None or head2 == None:
-            return head1 or head2
-        dummy = ListNode(0)
-        cur = dummy
-        while head1 and head2:
-            if head1.val<=head2.val:
-                cur.next = head1
-                head1 = head1.next
+def numSquares(n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        sqrt = 1
+        count = 0
+        sq_list = []
+        while sqrt**2<=n:
+            sq_list.append(sqrt**2)
+            sqrt += 1
+        nums = [4]*(n+1)
+        for i in range(1,n+1):
+            if i in sq_list:
+                nums[i] = 1
             else:
-                cur.next = head2
-                head2 = head2.next
-            cur = cur.next
-        cur.next = head1 or head2
-        return dummy.next
+                for item in sq_list:
+                    if item<i:
+                        nums[i] = min(nums[i],nums[i-item]+1)
+                    else:
+                        break
+        return nums[-1]
 
+print(numSquares(2))
