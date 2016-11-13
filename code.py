@@ -3120,3 +3120,99 @@ class Solution(object): #279
             nums.append(append)
             #print(nums)
         return nums[n]
+
+def findDisappearedNumbers(self, nums): #448
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        for i in range(len(nums)):
+            while nums[i] != i+1 and nums[nums[i]-1] != nums[i]:
+                value = nums[i]
+                nums[i],nums[value-1] = nums[value-1],nums[i]
+        result = []
+        for index,num in enumerate(nums):
+            if index+1 != num:
+                result.append(index+1)
+        return result
+
+def findDuplicates(self, nums): #442
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        for i in range(len(nums)):
+            while nums[i] != i+1 and nums[nums[i]-1] != nums[i]:
+                value = nums[i]
+                nums[i],nums[value-1] = nums[value-1],nums[i]
+        result = []
+        for index,num in enumerate(nums):
+            if index+1 != num:
+                result.append(num)
+        return result
+
+class Solution(object): #433 BFS
+    def minMutation(self, start, end, bank):
+        """
+        :type start: str
+        :type end: str
+        :type bank: List[str]
+        :rtype: int
+        """
+        FIFO = [start]
+        count = 0
+        while FIFO:
+            for i in range(len(FIFO)):
+                item = FIFO.pop(0)
+                gene_length = len(bank)
+                i = 0
+                while i<gene_length:
+                    if self.differBySingleChar(bank[i],item):
+                        if bank[i] == end:
+                            return count+1
+                        else:
+                            FIFO.append(bank.pop(i))
+                            gene_length -= 1
+                    else:
+                        i += 1
+            count += 1
+        return -1
+
+
+    def differBySingleChar(self,str1,str2):
+        count = 0
+        for i in range(len(str1)):
+            if str1[i] != str2[i]:
+                count += 1
+        return count == 1
+
+
+def singleNumber(self, nums): #260
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        xor = reduce(lambda x,y:x^y,nums,0)
+        bit = 1
+        while bit&xor != bit:
+            bit <<= 1
+        fir,sec = 0,0
+        for num in nums:
+            if num&bit == bit:
+                fir ^= num
+            else:
+                sec ^= num
+        return [fir,sec]
+
+def grayCode(self, n): #89
+        """
+        :type n: int
+        :rtype: List[int]
+        """
+        result = [0]
+        tmp = 1
+        for i in range(n):
+            for item in reversed(result):
+                result.append(tmp|item)
+            tmp = tmp<<1
+        return result
