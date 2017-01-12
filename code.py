@@ -1,4 +1,5 @@
 import itertools,collections
+
 class ListNode(object):     #Problem 2
     def __init__(self, x):
         self.val = x
@@ -3216,3 +3217,121 @@ def grayCode(self, n): #89
                 result.append(tmp|item)
             tmp = tmp<<1
         return result
+
+
+def copyRandomList(self, head): #138
+        """
+        :type head: RandomListNode
+        :rtype: RandomListNode
+        """
+        if not head:
+            return None
+        id_index = {}
+        cur = head
+        count = 0
+        new_list = []
+        while cur:
+            id_index[id(cur)] = count
+            node = RandomListNode(cur.label)
+            new_list.append(node)
+            cur = cur.next
+            count += 1
+        index_random = {}
+        cur = head
+        count = 0
+        print(id_index)
+        while cur:
+            if cur.random:
+                index_random[count] = id_index[id(cur.random)]
+            else:
+                index_random[count] = None
+            cur = cur.next
+            count += 1
+        print(index_random)
+        for i in range(len(new_list)-1):
+            new_list[i].next = new_list[i+1]
+            if index_random[i] != None:
+                new_list[i].random = new_list[index_random[i]]
+        if index_random[len(new_list)-1] != None:
+            new_list[-1].random = new_list[index_random[len(new_list)-1]]
+        return new_list[0]
+
+        #establish one map: id original nodes --> new nodes
+        # cur = head
+        # dummy = RandomListNode(0)
+        # pre = dummy
+        # id_map = {}
+        # while cur:
+        #     new_node = RandomListNode(cur.label)
+        #     id_map[id(cur)] = new_node
+        #     pre.next = new_node
+        #     pre = new_node
+        #     cur = cur.next
+        # cur = head
+        # while cur:
+        #     if cur.random:
+        #        id_map[id(cur)].random = id_map[id(cur.random)]
+        #     cur = cur.next
+        # return dummy.next
+
+def evalRPN(self, tokens): #150
+    """
+    :type tokens: List[str]
+    :rtype: int
+    """
+    stack = []
+    for toke in tokens:
+        #print(stack)
+        try:
+            tmp = int(toke)
+            stack.append(int(tmp))
+        except:
+            operand2 = stack.pop()
+            operand1 = stack.pop()
+            if toke == "+":
+                stack.append(operand1+operand2)
+            elif toke == "-":
+                stack.append(operand1-operand2)
+            elif toke == "*":
+                stack.append(operand1*operand2)
+            elif toke == "/":
+                if operand1*operand2<0:
+                    stack.append((abs(operand1)/abs(operand2))*-1)
+                else:
+                    stack.append(operand1/operand2)
+    return stack[0]
+
+def isOneEditDistance(self, s, t): #161
+    """
+    :type s: str
+    :type t: str
+    :rtype: bool
+    """
+    if len(s) == len(t):
+        count = 0
+        for i in range(len(s)):
+            if s[i] != t[i]:
+                count += 1
+        return count == 1
+    elif len(s)>len(t):
+        for i in range(len(t)):
+            if t[i] != s[i]:
+                return t[:i]+s[i]+t[i:] == s
+        return t+s[-1] == s
+    else:
+        for i in range(len(s)):
+            if t[i] != s[i]:
+                return s[:i]+t[i]+s[i:] == t
+        return s+t[-1] == t
+
+def uniquePaths(self, m, n): #62
+        """
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        r = min(m-1, n-1)
+        if r == 0: return 1
+        numer = reduce(lambda x,y:x*y, xrange(m+n-2, m+n-2-r, -1))
+        denom = reduce(lambda x,y:x*y, xrange(1, r+1))
+        return numer//denom
