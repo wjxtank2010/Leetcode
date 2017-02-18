@@ -47,3 +47,20 @@ def numSquares(n):
         return nums[-1]
 
 print(numSquares(2))
+
+def extract_text(file_path):
+    file = open(file_path)
+    lines = file.readlines()
+    print(len(lines))
+    count = 0
+    error = 0
+    for line in lines:
+        try:
+            text = yaml.load(line.strip())
+        except:
+            error += 1
+            continue
+        if text["extracted_text"]:
+            count += 1
+    print(count)
+    print(error)

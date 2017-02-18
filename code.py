@@ -2469,15 +2469,15 @@ def trap(self, height): #42 Stack
     stack = []
     water = 0
     for index,value in enumerate(height):
-        max_inter_height = 0
+        max_inner_height = 0
         while stack:
             last = stack[-1]
             if last[1]<=value:
-                water += (index-last[0]-1)*(last[1]-max_inter_height)
+                water += (index-last[0]-1)*(last[1]-max_inner_height)
                 ele = stack.pop()
-                max_inter_height = ele[1]
+                max_inner_height = ele[1]
             else:
-                water += (index-last[0]-1)*(value-max_inter_height)
+                water += (index-last[0]-1)*(value-max_inner_height)
                 break
         stack.append((index,value))
     return water
