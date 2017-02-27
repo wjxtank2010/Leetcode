@@ -46,6 +46,7 @@ def numSquares(n):
                         break
         return nums[-1]
 
+<<<<<<< Updated upstream
 print(numSquares(2))
 
 def extract_text(file_path):
@@ -64,3 +65,10 @@ def extract_text(file_path):
             count += 1
     print(count)
     print(error)
+=======
+#print(numSquares(2))
+a = 5
+def happy():
+    print(a)
+happy()
+>>>>>>> Stashed changes

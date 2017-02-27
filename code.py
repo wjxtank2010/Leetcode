@@ -3218,6 +3218,7 @@ def grayCode(self, n): #89
             tmp = tmp<<1
         return result
 
+<<<<<<< Updated upstream
 
 def copyRandomList(self, head): #138
         """
@@ -3325,13 +3326,37 @@ def isOneEditDistance(self, s, t): #161
         return s+t[-1] == t
 
 def uniquePaths(self, m, n): #62
+    """
+    :type m: int
+    :type n: int
+    :rtype: int
+    """
+    r = min(m-1, n-1)
+    if r == 0: return 1
+    numer = reduce(lambda x,y:x*y, xrange(m+n-2, m+n-2-r, -1))
+    denom = reduce(lambda x,y:x*y, xrange(1, r+1))
+    return numer//denom
+
+def mySqrt(self, x): #69
         """
-        :type m: int
-        :type n: int
-        :rtype: int
-        """
-        r = min(m-1, n-1)
-        if r == 0: return 1
-        numer = reduce(lambda x,y:x*y, xrange(m+n-2, m+n-2-r, -1))
-        denom = reduce(lambda x,y:x*y, xrange(1, r+1))
-        return numer//denom
+    :type x: int
+    :rtype: int
+    """
+    base = 1
+    while base**2<x:
+        base *= 2
+    start = base/2
+    end = base
+    while start<end:
+        mid = (start+end)/2
+        if mid**2>x:
+            end = mid-1
+        elif mid**2 == x:
+            return mid
+        else:
+            start = mid+1
+    if start**2>x:
+        return start-1
+    else:
+        return start
+
